@@ -601,6 +601,7 @@ progress {
 .img-fluid {
   max-width: 100%;
   height: auto;
+  object-fit: contain;
 }
 
 .img-thumbnail {
@@ -11364,9 +11365,9 @@ section#contact form#contactForm :-ms-input-placeholder {
 /*Modificaciones Gabriel*/
 
 .img-cuadricula {
-    width: 415px;
-    height: 250px;
-    object-fit: contain; /*fill o contain?*/
+    width: 100%;
+    height: auto;
+    object-fit: contain;
     border-radius: 5px;
     display: block;
     margin: auto;
@@ -11393,3 +11394,18 @@ section#contact form#contactForm :-ms-input-placeholder {
     margin: auto;
     object-fit: contain; /* Asegura que la imagen completa se vea sin cortes */
 }
+
+/* Contenedor responsivo para imágenes */
+.img-container {
+    width: 100%;  /* Asegura que el contenedor ocupe todo el ancho disponible */
+    max-width: 600px;  /* Limita el tamaño máximo */
+    height: 400px; /* Establece una altura fija */
+    margin: auto; /* Centra el contenedor */
+    padding: 10px; /* Espaciado adicional */
+    overflow: hidden; /* Oculta cualquier parte de la imagen que sobrepase el contenedor */
+    display: flex; /* Flexbox para centrar la imagen dentro del contenedor */
+    justify-content: center;
+    align-items: center;
+}
+
+

@@ -1,5 +1,4 @@
 from django.db import models
-
 import os
 from uuid import uuid4
 
@@ -21,8 +20,8 @@ class ItemCuadricula(models.Model):
     nombre = models.CharField(max_length=100)
     imagen = models.ImageField(upload_to=image_upload_path)
     resumen = models.CharField(max_length=150)  # Texto corto para la cuadrícula
-    descripcion = models.TextField()  # Texto más largo para el modal
-    seccion = models.CharField(max_length=20, choices=SECCIONES)
-
+    descripcion = models.TextField()  # Usar un TextField normal
+    seccion = models.CharField(max_length=10, choices=SECCIONES)
+    
     def __str__(self):
         return f"{self.nombre} - {self.seccion}"
