@@ -1,0 +1,1 @@
+web: gunicorn fundacion_entre_fuelles.wsgi
