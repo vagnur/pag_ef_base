@@ -1,0 +1,83 @@
+{% extends 'admin_panel/base_admin.html' %}
+
+{% block content %}
+<div class="card-header">
+  <h3 class="card-title">Listado de Entradas - {{ nombre_seccion }}</h3>
+  <div class="card-tools">
+    <a href="{% url 'admin_panel_create_item' %}" class="btn btn-primary btn-sm">
+      <i class="fas fa-plus"></i> Nueva Entrada
+    </a>
+  </div>
+</div>
+
+
+  <div class="card-body">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Sección</th>
+          <th>Nombre</th>
+          <th>Imagen</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td>{{ item.seccion|title }}</td>
+          <td>{{ item.nombre }}</td>
+          <td>
+            {% if item.imagen %}
+              <img src="{{ item.imagen.url }}" alt="Imagen" style="height: 50px;">
+            {% else %}
+              No imagen
+            {% endif %}
+          </td>
+          <td>
+            <a href="{% url 'admin_panel_edit_item' item.id %}" class="btn btn-warning btn-sm">
+              <i class="fas fa-edit"></i> Editar
+            </a>
+            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{ item.id }}">
+              <i class="fas fa-trash"></i> Eliminar
+            </button>
+
+            <!-- Modal de Confirmación -->
+            <div class="modal fade" id="modal-delete-{{ item.id }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel-{{ item.id }}" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel-{{ item.id }}">Confirmar Eliminación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+
+                  <div class="modal-body">
+                    ¿Seguro que deseas eliminar <strong>{{ item.nombre }}</strong> de <strong>{{ item.seccion|title }}</strong>?
+                  </div>
+
+                  <div class="modal-footer">
+                      <form method="post" action="{% url 'admin_panel_delete_item' item.id seccion_actual %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </td>
+
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4">No hay entradas registradas.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
