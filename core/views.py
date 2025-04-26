@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages  
 from .forms import ItemCuadriculaForm
+import os
 
 
 def index(request):
@@ -68,16 +69,27 @@ def admin_panel_edit_item(request, item_id):
     item = ItemCuadricula.objects.get(id=item_id)
 
     if request.method == 'POST':
+        old_image = item.imagen  # Guardamos la imagen antigua
+
         form = ItemCuadriculaForm(request.POST, request.FILES, instance=item)
         if form.is_valid():
+            new_image = form.cleaned_data.get('imagen')
+
+            # Si subieron una imagen nueva distinta
+            if new_image and old_image != new_image:
+                # Eliminar la imagen anterior
+                if old_image and os.path.isfile(old_image.path):
+                    os.remove(old_image.path)
+
             item = form.save()
+
             messages.success(request, 'Entrada editada exitosamente.')
             return redirect('admin_panel_items_by_section', seccion=item.seccion)
-
     else:
         form = ItemCuadriculaForm(instance=item)
 
     return render(request, 'admin_panel/item_form.html', {'form': form, 'accion': 'Editar Entrada'})
+
 
 @login_required
 def admin_panel_items_by_section(request, seccion):
@@ -100,10 +112,22 @@ def admin_panel_items_by_section(request, seccion):
     'seccion_actual': seccion,  # <<<< PASAMOS ESTO
     })
 
+import os
+
 @login_required
 def admin_panel_delete_item(request, item_id, seccion):
     item = ItemCuadricula.objects.get(id=item_id)
 
     if request.method == 'POST':
+        # Eliminar archivo de imagen si existe
+        if item.imagen and os.path.isfile(item.imagen.path):
+            os.remove(item.imagen.path)
+        
+        # Luego eliminar el objeto
         item.delete()
-        return redirect('admin_panel_items_by_section', seccion=seccion.lower())
+
+        messages.success(request, 'Entrada eliminada exitosamente.')
+        return redirect('admin_panel_items_by_section', seccion=seccion)
+
+    return redirect('admin_panel_home')  # Si alguien intenta hacer GET raro
+
