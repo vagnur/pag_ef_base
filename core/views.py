@@ -52,6 +52,8 @@ def admin_panel_items(request):
 
 @login_required
 def admin_panel_create_item(request):
+    seccion = request.GET.get('seccion', '')  # <- Capturamos la sección desde la URL (query string)
+
     if request.method == 'POST':
         form = ItemCuadriculaForm(request.POST, request.FILES)
         if form.is_valid():
@@ -62,7 +64,11 @@ def admin_panel_create_item(request):
     else:
         form = ItemCuadriculaForm()
 
-    return render(request, 'admin_panel/item_form.html', {'form': form, 'accion': 'Crear Nueva Entrada'})
+    return render(request, 'admin_panel/item_form.html', {
+        'form': form,
+        'accion': 'Crear Nueva Entrada',
+        'seccion': seccion,  # <- Enviamos la sección al template
+    })
 
 @login_required
 def admin_panel_edit_item(request, item_id):
@@ -88,7 +94,12 @@ def admin_panel_edit_item(request, item_id):
     else:
         form = ItemCuadriculaForm(instance=item)
 
-    return render(request, 'admin_panel/item_form.html', {'form': form, 'accion': 'Editar Entrada'})
+    return render(request, 'admin_panel/item_form.html', {
+        'form': form,
+        'accion': 'Editar Entrada',
+        'seccion': item.seccion,  # <- Enviamos la sección también aquí
+    })
+
 
 
 @login_required

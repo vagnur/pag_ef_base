@@ -36,7 +36,11 @@
       </div>
 
       <button type="submit" class="btn btn-success">Guardar</button>
-      <a href="{% url 'admin_panel_items' %}" class="btn btn-secondary">Cancelar</a>
+      {% if seccion %}
+          <a href="{% url 'admin_panel_items_by_section' seccion %}" class="btn btn-secondary">Cancelar</a>
+      {% else %}
+          <a href="{% url 'admin_panel_home' %}" class="btn btn-secondary">Cancelar</a>
+      {% endif %}
     </form>
   </div>
 </div>
