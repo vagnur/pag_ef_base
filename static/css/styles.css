@@ -11422,3 +11422,18 @@ section#contact form#contactForm :-ms-input-placeholder {
 .footer .text-lg-start {
   white-space: nowrap;
 }
+
+.btn-dark:hover {
+  background-color: #333333;
+  border-color: #333333;
+}
+
+.modal-body a {
+  color: #0d6efd; /* azul Bootstrap */
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.modal-body a:hover {
+  color: #0a58ca; /* azul más oscuro al pasar el mouse */
+}
